@@ -1,0 +1,19 @@
+{
+  "type": "mysql",
+  "host": "localhost",
+  "port": 3306,
+  "username": "root",
+  "password": "",
+  "database": "insight-dev",
+  "synchronize": true,
+  "logging": false,
+  "entities": [
+     "src/database/models/*.ts"
+  ],
+  "migrations": [
+     "src/database/migrations/*.ts"
+  ],
+  "subscribers": [
+     "src/database/subscribers/*.ts"
+  ]
+}
