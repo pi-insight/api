@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { PaginationDto } from './dto/pagination.dto';
 import { PatchDto } from './dto/patch.dto';
 import { User } from './user.entity';
 
@@ -59,5 +60,12 @@ export class UsersService {
     const modified = { ...user, ...rest };
 
     return await this.usersRepository.save(modified);
+  }
+
+  async paginate(dto: PaginationDto) {
+    return await this.usersRepository.find({
+      skip: dto.offset,
+      take: dto.limit,
+    });
   }
 }

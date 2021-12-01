@@ -5,6 +5,7 @@ import {
   Inject,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { Project } from './project.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -43,6 +44,21 @@ export class ProjectsService {
 
     project.members = foundMembers;
     project.owner = owner;
+    // project.image = image.path;
+
+    return await this.projectsRepository.save(project);
+  }
+
+  async setImage(id: number, user: User, file: Express.Multer.File) {
+    const project = await this.projectsRepository.findOne(id, {
+      relations: ['owner'],
+    });
+
+    if (!project || project.owner.id !== user.id) {
+      throw new UnauthorizedException();
+    }
+
+    project.image = file.path;
 
     return await this.projectsRepository.save(project);
   }

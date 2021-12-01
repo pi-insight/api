@@ -6,6 +6,7 @@ import {
   Param,
   ParseIntPipe,
   Patch,
+  Query,
   Req,
   UnauthorizedException,
   UploadedFile,
@@ -17,6 +18,7 @@ import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { Blob } from 'buffer';
 import { diskStorage } from 'multer';
 import { User } from './user.entity';
+import { PaginationDto } from './dto/pagination.dto';
 
 @Controller('users')
 export class UsersController {
@@ -24,6 +26,11 @@ export class UsersController {
     private readonly usersService: UsersService,
     private readonly projectsService: ProjectsService,
   ) {}
+
+  @Get()
+  async paginate(@Query() query: PaginationDto) {
+    return this.usersService.paginate(query);
+  }
 
   @Get(':id')
   async fineOne(@Param('id', new ParseIntPipe()) id: number) {
