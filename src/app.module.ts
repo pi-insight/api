@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppService } from './app.service';
@@ -20,7 +20,8 @@ import { ConfigModule } from '@nestjs/config';
       port: 3306,
       username: 'root',
       password: 'root',
-      database: 'insight-dev',
+      database: 'insight-dev-2',
+      logging: ['query'],
       autoLoadEntities: true,
       synchronize: true,
     }),
