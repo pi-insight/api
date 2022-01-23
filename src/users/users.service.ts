@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindOneOptions, Repository } from 'typeorm';
 import { PaginationDto } from './dto/pagination.dto';
 import { PatchDto } from './dto/patch.dto';
 import { User } from './user.entity';
@@ -30,17 +30,26 @@ export class UsersService {
       throw new ConflictException('email or username already in use');
     }
 
-    const user = this.usersRepository.create({ username, email, password });
+    const user = this.usersRepository.create({
+      username,
+      email,
+      password,
+      displayname: username,
+    });
 
     return await this.usersRepository.save(user);
   }
 
   async findOne(params: Partial<User> | number): Promise<User | undefined> {
+    const options: FindOneOptions<User> = {
+      relations: ['projects'],
+    };
+
     if (typeof params === 'number') {
-      return await this.usersRepository.findOne(params);
+      return await this.usersRepository.findOne(params, options);
     }
 
-    return await this.usersRepository.findOne(params);
+    return await this.usersRepository.findOne(params, options);
   }
 
   async modify(dto: PatchDto, user: User) {

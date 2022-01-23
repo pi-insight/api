@@ -10,9 +10,17 @@ import { InjectRepository } from '@nestjs/typeorm';
 export class GroupsService {
   constructor(
     @InjectRepository(Group)
-    private groupsRepository: Repository<Group>,
-    private usersService: UsersService,
+    private readonly groupsRepository: Repository<Group>,
+    private readonly usersService: UsersService,
   ) {}
+
+  async findByUserId(id: number) {
+    return await this.groupsRepository
+      .createQueryBuilder('group')
+      .leftJoinAndSelect('group.members', 'members')
+      .where('members.id = :id', { id })
+      .getMany();
+  }
 
   async create(body: CreateGroupDto, owner: User) {
     const { members, ...rest } = body;
@@ -20,10 +28,23 @@ export class GroupsService {
     const uniqueMembers = [...new Set([...members, owner.id])];
     const loadedMembers = await this.usersService.findByIds(uniqueMembers);
 
+    uniqueMembers.map((id) => {
+      if (!loadedMembers.find((user) => user.id === id)) {
+        throw new NotFoundException(`User with id ${id} not found`);
+      }
+    });
+
     const group = await this.groupsRepository.create(rest);
     group.owner = owner;
     group.members = loadedMembers;
     return await this.groupsRepository.save(group);
+  }
+
+  async paginate(offset: number, limit: number): Promise<Group[]> {
+    return await this.groupsRepository.find({
+      skip: offset,
+      take: limit,
+    });
   }
 
   async findOne(id: string) {

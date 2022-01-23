@@ -19,12 +19,14 @@ import { Blob } from 'buffer';
 import { diskStorage } from 'multer';
 import { User } from './user.entity';
 import { PaginationDto } from './dto/pagination.dto';
+import { GroupsService } from 'src/groups/groups.service';
 
 @Controller('users')
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
     private readonly projectsService: ProjectsService,
+    private readonly groupsService: GroupsService,
   ) {}
 
   @Get()
@@ -40,6 +42,11 @@ export class UsersController {
   @Get(':id/projects')
   async findProjects(@Param('id', new ParseIntPipe()) id: number) {
     return this.projectsService.findByUserId(id);
+  }
+
+  @Get(':id/groups')
+  async findGroups(@Param('id', new ParseIntPipe()) id: number) {
+    return this.groupsService.findByUserId(id);
   }
 
   @UseInterceptors(

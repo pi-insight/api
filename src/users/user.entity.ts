@@ -26,11 +26,17 @@ export class User {
   @Column({ nullable: true })
   image: string;
 
-  @Column({ unique: true, length: 32 })
+  @Column({ length: 16 })
+  displayname: string;
+
+  @Column({ unique: true, length: 16 })
   username: string;
 
   @Column()
   email: string;
+
+  @Column({ type: 'text', nullable: true })
+  description: string;
 
   @Column({ length: 128 })
   @Exclude()

@@ -1,17 +1,9 @@
-import { Type } from 'class-transformer';
-import {
-  IsBase64,
-  IsEmail,
-  IsOptional,
-  Length,
-  Min,
-  ValidateIf,
-} from 'class-validator';
+import { IsEmail, IsOptional, Length, ValidateIf } from 'class-validator';
 
 export class PatchDto {
   @IsOptional()
-  @Length(8, 22)
-  name?: string;
+  @Length(5, 16)
+  displayname?: string;
   @IsEmail()
   @IsOptional()
   email?: string;

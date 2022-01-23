@@ -4,7 +4,7 @@ export class RegisterDto {
   @IsEmail()
   email: string;
 
-  @Length(8, 32)
+  @Length(5, 16)
   username: string;
 
   @Length(8, 128)

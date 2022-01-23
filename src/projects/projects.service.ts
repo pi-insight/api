@@ -1,10 +1,7 @@
 import { Repository } from 'typeorm';
 import {
   ConflictException,
-  forwardRef,
-  Inject,
   Injectable,
-  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { Project } from './project.entity';
@@ -64,7 +61,9 @@ export class ProjectsService {
   }
 
   async findOne(id: number): Promise<Project> {
-    return await this.projectsRepository.findOne(id);
+    return await this.projectsRepository.findOne(id, {
+      relations: ['members', 'owner'],
+    });
   }
 
   async paginate(offset: number, limit: number): Promise<Project[]> {

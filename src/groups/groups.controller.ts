@@ -1,6 +1,7 @@
 import { CreateGroupDto } from './dto/create.dto';
-import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query, Req } from '@nestjs/common';
 import { GroupsService } from './groups.service';
+import { PaginationDto } from 'src/users/dto/pagination.dto';
 
 @Controller('groups')
 export class GroupsController {
@@ -14,5 +15,10 @@ export class GroupsController {
   @Get('/:id')
   async get(@Param('id') id: string) {
     return await this.groupsService.findOne(id);
+  }
+
+  @Get()
+  async paginate(@Query() query: PaginationDto) {
+    return await this.groupsService.paginate(query.offset, query.limit);
   }
 }

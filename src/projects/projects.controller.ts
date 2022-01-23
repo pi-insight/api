@@ -38,6 +38,11 @@ export class ProjectsController {
     return await this.projectsService.setImage(id, req.user, file);
   }
 
+  @Get(':id')
+  async get(@Param('id', new ParseIntPipe()) id: number) {
+    return this.projectsService.findOne(id);
+  }
+
   @Get()
   async paginate(@Query() query: PaginationDto) {
     return await this.projectsService.paginate(query.offset, query.limit);
