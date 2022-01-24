@@ -17,6 +17,6 @@ async function bootstrap() {
   app.use(morgan('combined'));
   app.use('/public', express.static(path.join(__dirname, '..', 'public')));
 
-  await app.listen(3000);
+  await app.listen(process.env.PORT || 3000);
 }
 bootstrap();
